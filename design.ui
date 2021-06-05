@@ -153,7 +153,7 @@
      <rect>
       <x>10</x>
       <y>330</y>
-      <width>152</width>
+      <width>191</width>
       <height>24</height>
      </rect>
     </property>
@@ -161,7 +161,7 @@
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Сегодня:</string>
+        <string>Выбор даты:</string>
        </property>
       </widget>
      </item>
@@ -180,10 +180,10 @@
         <bool>true</bool>
        </property>
        <property name="readOnly">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::NoButtons</enum>
+        <enum>QAbstractSpinBox::UpDownArrows</enum>
        </property>
        <property name="accelerated">
         <bool>false</bool>
@@ -197,8 +197,22 @@
        <property name="showGroupSeparator" stdset="0">
         <bool>false</bool>
        </property>
+       <property name="maximumDate">
+        <date>
+         <year>2022</year>
+         <month>12</month>
+         <day>31</day>
+        </date>
+       </property>
+       <property name="minimumDate">
+        <date>
+         <year>2020</year>
+         <month>9</month>
+         <day>14</day>
+        </date>
+       </property>
        <property name="calendarPopup">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -209,7 +223,7 @@
      <rect>
       <x>10</x>
       <y>150</y>
-      <width>931</width>
+      <width>937</width>
       <height>156</height>
      </rect>
     </property>
