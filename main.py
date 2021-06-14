@@ -175,13 +175,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 final_distance += item.distance
                 if intermediate_date != str(item.date):
                     distance_list[index] = int(round(distance / 1000, 0))
-                    # distance_list.append('')
                     distance = 0
                 distance += item.distance
                 if str(item.date) not in date:
                     intermediate_date = str(item.date)
                     date.append(str(item.date))
                     index = date.index(str(item.date))
+                    distance_list.append('')
                 else:
                     date.append('')
                     distance_list.append('')
@@ -192,9 +192,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 while len(distance_list) < len(date):
                     distance_list.append('')
             final_distance = int(round(final_distance / 1000))
-            date += ['', '', '']
-            from_ += ['', '', '']
-            to_ += ['Итого:(км)', 'Итого к выплате:(руб)', 'Цена бензина за 1 л.:']
+            date += ['', '', '', '']
+            from_ += ['', '', '', '']
+            to_ += ['', 'Итого:(км)', 'Итого к выплате:(руб)', 'Цена бензина за 1 л.:']
             distance_list += [final_distance, round(final_distance / 10 * price_gas, 1), price_gas]
             database.close()
             return self.pandas_processing(date=date, from_=from_, to_=to_, distance=distance_list)

@@ -1,6 +1,5 @@
-API_KEY = 'AIzaSyCXt1Eua1TQsFtAYa3f81GHbg-r0bfE0Hc'
-# API_KEY = 'AIzaSyAWM5yAk5kJXm_pZI2vBOIhPVwn0QcgBa0'
+API_KEY = 'API_KEY_from_google'
 
-ADDRESS_EMAIL = "programma.vygruzki@mail.ru"
+ADDRESS_EMAIL = "your_email"
 
-PASSWORD_EMAIL = "vygruzka2021"
+PASSWORD_EMAIL = "your_email_password"
