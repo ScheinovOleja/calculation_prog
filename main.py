@@ -1,3 +1,4 @@
+import configparser
 import datetime
 import mimetypes
 import os
@@ -12,7 +13,6 @@ import requests
 import pandas as pd
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QIcon
-from config import *
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from models import database, Data
 from design import Ui_MainWindow
@@ -42,6 +42,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         database.connect()
         database.create_tables([Data])
         database.close()
+        self.config = configparser.ConfigParser()
+        self.config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.cfg'))
         self.show()
         self.init_ui()
 
@@ -62,7 +64,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         check, file = self.unload_data()
         if check:
             msg = MIMEMultipart()
-            msg['From'] = ADDRESS_EMAIL
+            msg['From'] = self.config['program']['ADDRESS_EMAIL']
             msg['To'] = email
             msg['Subject'] = 'Отчет'
             filename = os.path.basename(file)
@@ -80,17 +82,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             msg.attach(MIMEText(body, 'plain'))
             server = smtplib.SMTP('smtp.mail.ru', 25)
             server.starttls()
-            server.login(ADDRESS_EMAIL, PASSWORD_EMAIL)
+            server.login(self.config['program']['ADDRESS_EMAIL'], self.config['program']['PASSWORD_EMAIL'])
             server.send_message(msg)
             server.quit()
 
     def load_data(self):
         database.connect()
-        if self.lineEdit_2.text() == '':
-            self.widget_act('Заполните поле с вашим адресом!')
-            database.close()
-            return False
-        elif self.lineEdit.text() == '':
+        if self.lineEdit.text() == '':
             self.widget_act('Заполните поле с адресами!')
             database.close()
             return False
@@ -100,11 +98,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 database.close()
                 return
             else:
-                final_address = self.lineEdit_2.text() + ';' + self.lineEdit.text() + ';' + self.lineEdit_2.text()
+                final_address = self.config['address']['MY_ADDRESS'] + ';' + self.lineEdit.text() + ';' + \
+                                self.config['address']['MY_ADDRESS']
                 row = final_address.split(';')
                 for i in range(len(row) - 1):
                     url = f"https://maps.googleapis.com/maps/api/distancematrix/json?origins={row[i]}, Москва" \
-                          f"&destinations={row[i + 1]}, Москва&key={API_KEY}&language=ru&region=ru"
+                          f"&destinations={row[i + 1]}, Москва&key={self.config['program']['API_KEY']}&language=" \
+                          f"ru&region=ru"
                     r = requests.get(url)
                     data_list = json.loads(r.text)
                     if data_list['rows'][0]['elements'][0]['status'] == 'NOT_FOUND':
