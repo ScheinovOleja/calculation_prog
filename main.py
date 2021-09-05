@@ -43,7 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         database.create_tables([Data])
         database.close()
         self.config = configparser.ConfigParser()
-        self.config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'config.cfg'))
+        self.config.read(f'{os.getcwd()}\\config.cfg')
         self.show()
         self.init_ui()
 
@@ -120,7 +120,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         ).save()
                 self.widget_act('Данные успешно загружены в базу!')
             self.lineEdit.clear()
-            self.lineEdit_2.clear()
             database.close()
 
     def widget_act(self, text_to_send):
@@ -144,13 +143,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         df = pd.read_excel(f"unload_{datetime.datetime.now().date()}_{self.spinBox.text()}_month.xlsx")
         df1 = df.replace(np.nan, '', regex=True)
         df1.to_html(f"{os.getcwd()}\\file.html")
+        if not os.path.isdir(f'{os.getcwd()}\\unloading'):
+            os.mkdir(f'{os.getcwd()}\\unloading')
         pdfkit.from_file(f"{os.getcwd()}\\file.html",
-                         f'{os.getcwd()}\\unload_{datetime.datetime.now().date()}_{self.spinBox.text()}_month.pdf',
-                         configuration=config, options={'encoding': "UTF-8"})
+                         f'{os.getcwd()}\\unloading\\unload_{datetime.datetime.now().date()}_{self.spinBox.text()}'
+                         f'_month.pdf', configuration=config, options={'encoding': "UTF-8"})
         os.remove(f'{os.getcwd()}\\file.html')
         os.remove(f'{os.getcwd()}\\unload_{datetime.datetime.now().date()}_{self.spinBox.text()}_month.xlsx')
         self.widget_act('Вы успешно выгрузили данные!')
-        return f'{os.getcwd()}\\unload_{datetime.datetime.now().date()}_{self.spinBox.text()}_month.pdf'
+        return f'{os.getcwd()}\\unloading\\unload_{datetime.datetime.now().date()}_{self.spinBox.text()}_month.pdf'
 
     def data_processing(self, price_gas):
         database.connect()
